@@ -1,2 +1,5 @@
 # simpleSearching
-to practice UIKIT
+模仿淘宝的搜索框实现，api来源是教书先生
+
+本项目除了打开的网页就使用了一个页面，通过点击搜索框显示搜索结果隐藏热搜
+在实现过程中，自定义了一个tableviewcell来显示热搜榜内容。点击该cell后执行performsegue来跳转到页面。
