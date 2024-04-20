@@ -13,8 +13,10 @@ class ViewController: UIViewController,
                       UISearchBarDelegate
 {
     //MARK:-tableview，热搜栏和查找结果的相关操作
-    @IBOutlet weak var hotListTableView: UITableView!
-    @IBOutlet weak var searchResultTableView: UITableView!
+    
+    @IBOutlet weak var hotListResult: UITableView!
+    @IBOutlet weak var searchResult: UITableView!
+    
     //tag为1表示热搜榜的相关操作，为2是搜索栏结果的操作
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView.tag == 1 {
@@ -98,7 +100,7 @@ class ViewController: UIViewController,
                 }
                 historylist.append(Product(name: self.searchlist!.productList![indexPath.row-historylist.count].name,
                                            sales: self.searchlist!.productList![indexPath.row-historylist.count].sales))
-                searchResultTableView.reloadData()
+                searchResult.reloadData()
             }else{
                 var text = self.searchlist!.productList![indexPath.row-historylist.count].name
                 for p in historylist{
@@ -108,7 +110,7 @@ class ViewController: UIViewController,
                 }
                 historylist.append(Product(name: self.searchlist!.productList![indexPath.row].name,
                                            sales: self.searchlist!.productList![indexPath.row].sales))
-                searchResultTableView.reloadData()
+                searchResult.reloadData()
             }
         }
         
@@ -133,19 +135,19 @@ class ViewController: UIViewController,
     //MARK:搜索框相关
     @IBOutlet weak var searchBar: UISearchBar!
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        hotListTableView.isHidden = true
-        searchResultTableView.isHidden = false
+        hotListResult.isHidden = true
+        searchResult.isHidden = false
         backButton.isHidden = false
         searchlist = SearchList()
         return true
     }
     //隐藏热搜，显示搜索结果
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        hotListTableView.isHidden = true
-        searchResultTableView.isHidden = false
+        hotListResult.isHidden = true
+        searchResult.isHidden = false
         searchlist?.loadData(searchURL: "https://api.oioweb.cn/api/search/taobao_suggest?keyword=".appending(searchText))
         DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
-            self.searchResultTableView.reloadData()
+            self.searchResult.reloadData()
         }
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -176,14 +178,14 @@ class ViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        hotListTableView.dataSource = self
-        hotListTableView.delegate = self
-        hotListTableView.tag = 1
+        hotListResult.dataSource = self
+        hotListResult.delegate = self
+        hotListResult.tag = 1
         
-        searchResultTableView.dataSource = self
-        searchResultTableView.delegate = self
-        searchResultTableView.tag = 2
-        searchResultTableView.isHidden = true
+        searchResult.dataSource = self
+        searchResult.delegate = self
+        searchResult.tag = 2
+        searchResult.isHidden = true
         
         backButton.isHidden = true
         searchBar.delegate = self
@@ -191,7 +193,7 @@ class ViewController: UIViewController,
         var hotlist = HotList(hotListURL: "https://api.oioweb.cn/api/common/HotList")
         
         DispatchQueue.main.asyncAfter(deadline: .now()+0.5){
-            self.hotListTableView.reloadData()
+            self.hotListResult.reloadData()
         }
     }
     //提取热搜榜的热度
@@ -212,9 +214,9 @@ class ViewController: UIViewController,
     @IBOutlet weak var backButton: UIBarButtonItem!
     
     @IBAction func backToHot(_ sender: Any) {
-        self.hotListTableView.isHidden = false
-        self.hotListTableView.reloadData()
-        self.searchResultTableView.isHidden = true
+        self.hotListResult.isHidden = false
+        self.hotListResult.reloadData()
+        self.searchResult.isHidden = true
         self.backButton.isHidden = true
     }
 }
